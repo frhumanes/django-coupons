@@ -41,7 +41,7 @@ class CouponForm(forms.Form):
             raise forms.ValidationError(_("This code is not valid."))
         self.coupon = coupon
 
-        if self.user is None and coupon.user_limit is not 1:
+        if self.user is None and coupon.user_limit != 1:
             # coupons with can be used only once can be used without tracking the user, otherwise there is no chance
             # of excluding an unknown user from multiple usages.
             raise forms.ValidationError(_(
@@ -56,7 +56,7 @@ class CouponForm(forms.Form):
             if user_coupon.redeemed_at is not None:
                 raise forms.ValidationError(_("This code has already been used by your account."))
         except CouponUser.DoesNotExist:
-            if coupon.user_limit is not 0:  # zero means no limit of user count
+            if coupon.user_limit != 0:  # zero means no limit of user count
                 # only user bound coupons left and you don't have one
                 if coupon.user_limit is coupon.users.filter(user__isnull=False).count():
                     raise forms.ValidationError(_("This code is not valid for your account."))
