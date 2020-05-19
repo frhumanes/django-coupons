@@ -1,5 +1,8 @@
 # Changelog
 
+## V 1.2.0a5
+ * Added on_delete requirement for Django>=2
+
 ## V 1.2.0
 
 * Drop support for Django 1.4 and 1.5
