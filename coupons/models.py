@@ -1,10 +1,11 @@
 import random
 
 from django.conf import settings
-from django.db import IntegrityError, models
+from django.db import IntegrityError
+from django.db import models
+from django.db.models import CASCADE
 from django.dispatch import Signal
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from .settings import (CODE_CHARS, CODE_LENGTH, COUPON_TYPES, SEGMENT_LENGTH,
@@ -71,7 +72,6 @@ class CouponManager(models.Manager):
         return self.filter(valid_until__lt=timezone.now())
 
 
-@python_2_unicode_compatible
 class Coupon(models.Model):
     value = models.IntegerField(_("Value"), help_text=_("Arbitrary coupon value"))
     code = models.CharField(
@@ -165,7 +165,6 @@ class Coupon(models.Model):
         redeem_done.send(sender=self.__class__, coupon=self)
 
 
-@python_2_unicode_compatible
 class Campaign(models.Model):
     name = models.CharField(_("Name"), max_length=255, unique=True)
     description = models.TextField(_("Description"), blank=True)
@@ -179,16 +178,9 @@ class Campaign(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class CouponUser(models.Model):
-    coupon = models.ForeignKey(Coupon, related_name="users", on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        user_model,
-        verbose_name=_("User"),
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-    )
+    coupon = models.ForeignKey(Coupon, on_delete=CASCADE, related_name='users')
+    user = models.ForeignKey(user_model, verbose_name=_("User"), on_delete=CASCADE, null=True, blank=True)
     redeemed_at = models.DateTimeField(_("Redeemed at"), blank=True, null=True)
 
     class Meta:
