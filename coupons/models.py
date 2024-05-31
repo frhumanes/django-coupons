@@ -15,7 +15,7 @@ try:
     user_model = settings.AUTH_USER_MODEL
 except AttributeError:
     from django.contrib.auth.models import User as user_model
-redeem_done = Signal(providing_args=["coupon"])
+redeem_done = Signal()
 
 
 class CouponManager(models.Manager):
