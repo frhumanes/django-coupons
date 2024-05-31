@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import CASCADE
 from django.dispatch import Signal
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .settings import (CODE_CHARS, CODE_LENGTH, COUPON_TYPES, SEGMENT_LENGTH,
                        SEGMENT_SEPARATOR, SEGMENTED_CODES)
